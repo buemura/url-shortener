@@ -19,8 +19,11 @@ func (u *CreateShortenedUrl) Execute(urlInput string) (*entity.Url, error) {
 		return nil, err
 	}
 
-	// // Save url in database
-	// u.urlRepo.Create(url)
+	// Save url in database
+	savedUrl, err := u.urlRepo.Create(url)
+	if err != nil {
+		return nil, err
+	}
 
-	return url, nil
+	return savedUrl, nil
 }

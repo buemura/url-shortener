@@ -1,0 +1,28 @@
+version: "3.9"
+
+networks:
+  shortener:
+
+services:
+  redis:
+    image: redis:alpine
+    hostname: redis
+    ports:
+      - 6379:6379
+    networks:
+      - shortener
+
+  db-account:
+    image: postgres:latest
+    hostname: db-account
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=url_shortener
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: postgres -c checkpoint_timeout=600 -c max_wal_size=4096
+    networks:
+      - shortener
