@@ -7,7 +7,8 @@ import (
 )
 
 var (
-	PORT string
+	PORT         string
+	DATABASE_URL string
 )
 
 func LoadEnv() {
@@ -16,11 +17,13 @@ func LoadEnv() {
 
 	if err != nil {
 		PORT = os.Getenv("PORT")
+		DATABASE_URL = os.Getenv("DATABASE_URL")
 	} else {
 		PORT = viper.GetString("PORT")
+		DATABASE_URL = viper.GetString("DATABASE_URL")
 	}
 
-	if len(PORT) == 0 {
+	if len(PORT) == 0 || len(DATABASE_URL) == 0 {
 		panic("Missing environment variables")
 	}
 }

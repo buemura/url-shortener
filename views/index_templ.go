@@ -10,10 +10,6 @@ import "context"
 import "io"
 import "bytes"
 
-import (
-	"github.com/buemura/url-shortener/views/components"
-)
-
 func Index() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
@@ -27,23 +23,7 @@ func Index() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = components.Header().Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<body><main class=\"min-h-screen w-full bg-zinc-100\"></main>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = components.Footer().Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</body><script>\n            htmx.on('#form', 'htmx:xhr:progress', function(evt) {\n                htmx.find('#progress').setAttribute('value', evt.detail.loaded/evt.detail.total * 100)\n            });\n        </script></html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><script src=\"https://unpkg.com/htmx.org@1.9.10\" integrity=\"sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC\" crossorigin=\"anonymous\"></script><script src=\"https://cdn.tailwindcss.com\"></script><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>URL Shortener</title></head><body><main class=\"min-h-screen w-full flex flex-col justify-center items-center bg-zinc-900\"><h1 class=\"text-3xl text-zinc-200\">URL Shortener</h1><form hx-post=\"/shorten\" hx-swap=\"outerHTML\" hx-trigger=\"submit\" hx-encoding=\"multipart/form-data\"><div class=\"border-b-2 border-emerald-500 space-x-8 py-4\"><input type=\"text\" name=\"url\" placeholder=\"Enter link here\" class=\"outline-none border-none pl-2 bg-transparent text-zinc-200 text-xl\"> <button class=\"bg-emerald-500 text-zinc-200 p-2 rounded-md text-xl\">Shorten</button></div></form></main></body><script>\n            htmx.on('#form', 'htmx:xhr:progress', function(evt) {\n                htmx.find('#progress').setAttribute('value', evt.detail.loaded/evt.detail.total * 100)\n            });\n        </script></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

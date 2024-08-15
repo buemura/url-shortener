@@ -5,6 +5,8 @@ import (
 	"net/http"
 
 	"github.com/a-h/templ"
+	"github.com/buemura/url-shortener/internal/core/usecase"
+	"github.com/buemura/url-shortener/internal/infra/database"
 	"github.com/buemura/url-shortener/views"
 	"github.com/go-chi/chi/v5"
 )
@@ -19,7 +21,7 @@ func NewReader() *Handler {
 
 func (h *Handler) RegisterRoutes(s *chi.Mux) http.Handler {
 	s.Get("/", h.renderIndex)
-	s.Post("/short", h.calculateBonus)
+	s.Post("/shorten", h.calculateBonus)
 	return s
 }
 
@@ -29,10 +31,20 @@ func (h *Handler) renderIndex(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) calculateBonus(w http.ResponseWriter, r *http.Request) {
 	// Get url input
-	url := r.FormValue("url")
+	urlInput := r.FormValue("url")
+
+	// Call usecase
+	db := database.NewPgxUrlRepository()
+	uc := usecase.NewCreateShortenedUrl(db)
+
+	url, err := uc.Execute(urlInput)
+	if err != nil {
+		HandleRequestError(w, http.StatusInternalServerError, err, "")
+		return
+	}
 
 	// components.EmployeeSales(validRecords).Render(r.Context(), w)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]string{"url": url})
+	json.NewEncoder(w).Encode(url)
 }

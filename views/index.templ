@@ -1,22 +1,38 @@
 package views
 
-import (
-	"github.com/buemura/url-shortener/views/components"
-)
-
 templ Index() {
     <!DOCTYPE html>
     <html lang="en">
-        @components.Header()
+        <head>
+            <script
+                src="https://unpkg.com/htmx.org@1.9.10"
+                integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+                crossorigin="anonymous"
+            ></script>
+            <script src="https://cdn.tailwindcss.com"></script>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>URL Shortener</title>
+        </head>
 
         <body>
-            <main class="min-h-screen w-full bg-zinc-100">                
+            <main class="min-h-screen w-full flex flex-col justify-center items-center bg-zinc-900">
+                <h1 class="text-3xl text-zinc-200">URL Shortener</h1>
 
+                <form
+                    hx-post="/shorten"
+                    hx-swap="outerHTML"
+                    hx-trigger="submit"
+                    hx-encoding='multipart/form-data'
+                >
+                    <div class="border-b-2 border-emerald-500 space-x-8 py-4">
+                        <input type="text" name="url" placeholder="Enter link here" class="outline-none border-none pl-2 bg-transparent text-zinc-200 text-xl" />
+                        <button class="bg-emerald-500 text-zinc-200 p-2 rounded-md text-xl">Shorten</button>
+                    </div>
+                </form>
             </main>
-
-        @components.Footer()
         </body>
-    
+
         <script>
             htmx.on('#form', 'htmx:xhr:progress', function(evt) {
                 htmx.find('#progress').setAttribute('value', evt.detail.loaded/evt.detail.total * 100)

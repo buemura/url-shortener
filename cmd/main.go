@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/buemura/url-shortener/config"
+	"github.com/buemura/url-shortener/internal/infra/database"
 	"github.com/buemura/url-shortener/internal/infra/handler"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -17,6 +18,7 @@ import (
 
 func init() {
 	config.LoadEnv()
+	database.Connect()
 }
 
 func main() {
