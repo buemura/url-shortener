@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/buemura/url-shortener/config"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -11,10 +12,10 @@ type RedisCacheRepository struct {
 	rdb *redis.Client
 }
 
-func NewRedisCacheRepository(url, password string) *RedisCacheRepository {
+func NewRedisCacheRepository() *RedisCacheRepository {
 	client := redis.NewClient(&redis.Options{
-		Addr:     url,
-		Password: password,
+		Addr:     config.REDIS_URL,
+		Password: config.REDIS_PASSWORD,
 		DB:       0, // use default DB
 	})
 

@@ -2,8 +2,10 @@ package database
 
 import (
 	"context"
+	"errors"
 
 	"github.com/buemura/url-shortener/internal/core/entity"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -15,6 +17,28 @@ func NewPgxUrlRepository() *PgxUrlRepository {
 	return &PgxUrlRepository{
 		db: Conn,
 	}
+}
+
+func (r *PgxUrlRepository) FindByCode(code string) (*entity.Url, error) {
+	rows, err := r.db.Query(
+		context.Background(),
+		`SELECT id, original_url, code, created_at, updated_at
+		FROM "url" 
+		WHERE code = $1`,
+		code,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	url, err := pgx.CollectOneRow(rows, pgx.RowToAddrOfStructByPos[entity.Url])
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return url, nil
 }
 
 func (r *PgxUrlRepository) Create(url *entity.Url) (*entity.Url, error) {
