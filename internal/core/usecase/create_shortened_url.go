@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"log/slog"
+
 	"github.com/buemura/url-shortener/internal/core/entity"
 	"github.com/buemura/url-shortener/internal/core/gateway"
 )
@@ -20,6 +22,7 @@ func (u *CreateShortenedUrl) Execute(urlInput string) (*entity.Url, error) {
 	}
 
 	// Save url in database
+	slog.Info("[CreateShortenedUrl][Execute] - Saving url in db")
 	savedUrl, err := u.urlRepo.Create(url)
 	if err != nil {
 		return nil, err

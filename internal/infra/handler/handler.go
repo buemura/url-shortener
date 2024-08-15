@@ -45,8 +45,6 @@ func (h *Handler) getUrl(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// FIXME: Redirect to original url
-	w.WriteHeader(http.StatusFound)
 	http.Redirect(w, r, url.OriginalUrl, http.StatusMovedPermanently)
 }
 
