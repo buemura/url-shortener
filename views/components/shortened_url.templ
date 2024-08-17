@@ -1,0 +1,21 @@
+package components
+
+templ ShortenedURL(shortenUrl string) {
+    <div class="border-b-2 border-emerald-500 space-x-8 py-4">
+        <span class="outline-none border-none pl-2 bg-transparent text-zinc-200 text-xl" id="shortenUrl">{ shortenUrl }</span>
+        <button class="bg-emerald-500 hover:bg-emerald-600 text-zinc-200 p-2 rounded-md text-xl" id="copyBtn" onclick="copyContent()">Copy</button>
+
+        <script>
+            let text = document.getElementById("shortenUrl").innerHTML;
+            let btn = document.getElementById("copyBtn");
+            const copyContent = async () => {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    btn.innerText = "Copied"
+                } catch (err) {
+                    console.error("Failed to copy: ", err);
+                }
+            };
+        </script>
+    </div>
+}

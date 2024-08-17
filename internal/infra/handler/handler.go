@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/a-h/templ"
@@ -9,6 +9,7 @@ import (
 	"github.com/buemura/url-shortener/internal/infra/cache"
 	"github.com/buemura/url-shortener/internal/infra/database"
 	"github.com/buemura/url-shortener/views"
+	"github.com/buemura/url-shortener/views/components"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -62,8 +63,5 @@ func (h *Handler) calculateBonus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// components.EmployeeSales(validRecords).Render(r.Context(), w)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(url)
+	components.ShortenedURL(fmt.Sprintf("%s/%s", r.Host, url.Code)).Render(r.Context(), w)
 }
